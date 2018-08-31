@@ -248,15 +248,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     FarantoGUI(root).pack(side="top", fill="both", expand = True)
     root.mainloop()
-#todo
-#updater für mail to mit optionmenu <-
-#markdown section von markdowngui_final ziehen <-
-#makdown section updater schreiben für column buttons <-
-#button logic für text area schreiben todo <-
-#parse +columnname+ to variable todo <-
-#generate and view html schreiben <-
-#send mails logic schreiben todo <-
-#testing 
-#design
-#refactoring
-#py to exe?
+
