@@ -207,6 +207,7 @@ class FarantoGUI(tk.Frame):
             self.excel_sheet = pd.ExcelFile(self.file_name)
             self.data_frame = self.excel_sheet.parse(
                 self.excel_sheet.sheet_names[0])
+            self.data_frame.fillna(value = "Not available", inplace = True)
             self.column_names = list(self.data_frame.columns.values)
             self.mark.set_dataframe(self.data_frame)
             self.mark.update_buttons(self.column_names)
