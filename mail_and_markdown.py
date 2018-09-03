@@ -26,7 +26,11 @@ class MarkdownEditor(tk.Frame):
                 command = lambda idx = i: self.markdown_button_pressed(idx)))
             self.markdown_buttons[i].grid(row = 0, column = i,
                     sticky = "we")
-        self.mail_text = tk.Text(self, width = 80,font=("Arial",20))
+        for i in range(len(self.markdown_button_texts)):
+            self.column_buttons.append(tk.Button(self, text = " "))
+            self.column_buttons[i].grid(row = 1, column = i, sticky = "we")
+
+        self.mail_text = tk.Text(self, width = 90,font=("Arial",18))
         self.subject_entry = tk.Entry(self)
         self.subject_entry.grid(row = 2, column = 0, columnspan = 4,
                 sticky = "we")
@@ -95,8 +99,8 @@ class FarantoGUI(tk.Frame):
         self.mark = MarkdownEditor(self)
 
         self.top_frame.pack(side = "top", fill = "x")
-        self.bot_frame.pack(side = "bottom", fill = "x")
-        self.mark.pack(side = "bottom", fill = "x")
+        self.mark.pack(side = "top", fill = "x")
+        self.bot_frame.pack(side = "top", fill = "x")
                
     def initialize_bot_frame(self):
         """Bottom Frame with Buttons for Mail Sending and adding attachments"""
@@ -152,6 +156,7 @@ class FarantoGUI(tk.Frame):
                     else:
                         yag.send(to = to, subject = subject, contents = [body,
                             self.attachment_entry.get()])
+                    print("Mail sent")
                 except Exception:
                     self.print_error(("Unable to send Mails.Check Username "
                     "Password or Mail To."))
@@ -168,6 +173,7 @@ class FarantoGUI(tk.Frame):
         
     def initialize_top_frame(self):
         """Top Frame with Labels and Entries for G-Mail Login"""
+        self.column_names = ["Load Excel!"]
         self.top_frame = tk.Frame(self)
         self.username_label = tk.Label(self.top_frame, text = "Username G-Mail:")
         self.username_entry = tk.Entry(self.top_frame, width = 80)
@@ -186,7 +192,17 @@ class FarantoGUI(tk.Frame):
         self.file_entry = tk.Entry(self.top_frame, width = 80)
         self.file_entry.insert(0, "Path/to/the/xlsxFile")
         self.first_click = 0
+        ####
+        self.drop_menu_label = tk.Label(self.top_frame, text = "Mail to:")
+        self.dropVar = tk.StringVar()
+        self.dropVar.set("Load Excel File First.")
+        self.drop_menu = tk.OptionMenu(self.top_frame, self.dropVar,
+                *self.column_names)
+        self.drop_menu.config(width = 80)
 
+        self.drop_menu_label.grid(row = 3, column = 0, sticky = "w")
+        self.drop_menu.grid(row = 3, column = 1, sticky = "w")
+        ###
         #Set Layout of widgets
         self.username_label.grid(row = 0, column = 0, sticky="w")
         self.username_entry.grid(row = 0, column = 1, sticky = "w")
@@ -218,8 +234,7 @@ class FarantoGUI(tk.Frame):
                 
     def add_mail_to_option(self):
         """Adds Option menu with column names. Column Values are Recipients of the mails"""
-        self.drop_menu_label = tk.Label(self.top_frame, text = "Mail to:")
-        self.dropVar = tk.StringVar()
+        self.drop_menu_label.grid_remove()
         self.dropVar.set("Choose Recipient here..")
         self.drop_menu = tk.OptionMenu(self.top_frame, self.dropVar, 
                 *self.column_names, command = self.mail_to_listener)
